@@ -4,21 +4,22 @@
 """
 Модуль контроллеров для Pixelart Editor
 
-Контроллеры обрабатывают взаимодействие пользователя:
+Реализует Controller часть MVC паттерна:
 - InputController: обработка ввода (мышь, клавиатура)
-- FileController: работа с файлами
-- CanvasController: управление холстом
+- FileController: работа с файлами (save, load, export)
+- CanvasController: управление холстом и рисованием
 """
 
-# Будут импортированы после создания модулей
-# from .input_controller import InputController
-# from .file_controller import FileController
-# from .canvas_controller import CanvasController
+from .input_controller import InputController
+from .file_controller import FileController
+from .canvas_controller import CanvasController
 
 __all__ = [
-    # 'InputController',
-    # 'FileController',
-    # 'CanvasController',
+    'InputController',
+    'FileController',
+    'CanvasController',
 ]
 
 __version__ = '1.0.0'
+__author__ = 'Pixelart Editor Team'
+__description__ = 'Controllers for MVC pattern'

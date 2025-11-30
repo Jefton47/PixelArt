@@ -5,29 +5,24 @@
 Модуль пользовательского интерфейса для Pixelart Editor
 
 Компоненты UI:
-- Renderer: отрисовка
-- Button: кнопки
-- Slider: слайдеры
+- Button: кнопки с состояниями
+- Slider: слайдеры для выбора значений
+- ColorPicker: выбор цветов из палитры
 - Toolbar: панель инструментов
-- PaletteView: отображение палитры
-- Cursor: кастомные курсоры
 """
 
-# Будут импортированы после создания модулей
-# from .renderer import Renderer
-# from .button import Button
-# from .slider import Slider
-# from .toolbar import Toolbar
-# from .palette_view import PaletteView
-# from .cursor import Cursor
+from .button import Button
+from .slider import Slider
+from .color_picker import ColorPicker
+from .toolbar import Toolbar
 
 __all__ = [
-    # 'Renderer',
-    # 'Button',
-    # 'Slider',
-    # 'Toolbar',
-    # 'PaletteView',
-    # 'Cursor',
+    'Button',
+    'Slider',
+    'ColorPicker',
+    'Toolbar',
 ]
 
 __version__ = '1.0.0'
+__author__ = 'Pixelart Editor Team'
+__description__ = 'User interface components'

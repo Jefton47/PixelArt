@@ -1,11 +1,11 @@
 # ========================================
-# models/grid.py (ИСПРАВЛЕНО)
+# models/grid.py (ПОЛНОСТЬЮ ИСПРАВЛЕНО)
 # ========================================
 """Модуль сетки для рисования"""
 
 from typing import List, Tuple, Optional
 import pygame as pg
-from .cell import Cell  # ← ДОБАВЛЕНО!
+from .cell import Cell
 
 
 class Grid:
@@ -37,6 +37,10 @@ class Grid:
             for j in range(height):
                 column.append(Cell(cell_size, background_color))
             self._cells.append(column)
+        
+        # ДОБАВЛЕНО: Создаем менеджер истории
+        from .history import UndoRedoManager
+        self._history = UndoRedoManager(self)
     
     @property
     def width(self) -> int:
@@ -67,6 +71,12 @@ class Grid:
     def pixel_height(self) -> int:
         """Высота в пикселях"""
         return self._height * self._cell_size
+    
+    # ДОБАВЛЕНО: Свойство для доступа к истории
+    @property
+    def history(self):
+        """Менеджер истории изменений"""
+        return self._history
     
     def get_cell(self, x: int, y: int) -> Optional[Cell]:
         """

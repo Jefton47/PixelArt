@@ -2,23 +2,21 @@
 # core/__init__.py
 # ========================================
 """
-Ядро приложения Pixelart Editor
+Ядро приложения для Pixelart Editor
 
-Основные компоненты:
-- Application: главный класс приложения
-- EventManager: система событий
-- Config: конфигурация
+Содержит:
+- Config: конфигурация приложения
+- Application: главный класс приложения (Singleton)
 """
 
-# Будут импортированы после создания модулей
-# from .application import Application
-# from .event_manager import EventManager
-# from .config import Config
+from .config import Config
+from .application import Application
 
 __all__ = [
-    # 'Application',
-    # 'EventManager',
-    # 'Config',
+    'Config',
+    'Application',
 ]
 
 __version__ = '1.0.0'
+__author__ = 'Pixelart Editor Team'
+__description__ = 'Core application module'
