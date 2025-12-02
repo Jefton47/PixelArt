@@ -1,12 +1,6 @@
 # ========================================
-# models/palette.py (ИСПРАВЛЕНО - добавлен заголовок)
-# ========================================
-"""
-# ========================================
 # models/palette.py
 # ========================================
-Модуль цветовых палитр
-"""
 
 from typing import List, Tuple, Optional
 
@@ -14,7 +8,6 @@ from typing import List, Tuple, Optional
 class Palette:
     """
     Цветовая палитра - коллекция цветов
-    Поддерживает различные схемы и категории
     """
     
     def __init__(self, name: str, colors: List[Tuple[int, int, int]]):
@@ -54,20 +47,6 @@ class Palette:
         """Индекс выбранного цвета"""
         return self._selected_index
     
-    def get_color(self, index: int) -> Optional[Tuple[int, int, int]]:
-        """
-        Получить цвет по индексу
-        
-        Args:
-            index: индекс цвета
-        
-        Returns:
-            Цвет или None если индекс невалиден
-        """
-        if 0 <= index < len(self._colors):
-            return self._colors[index]
-        return None
-    
     def select_color(self, index: int) -> bool:
         """
         Выбрать цвет по индексу
@@ -83,51 +62,13 @@ class Palette:
             return True
         return False
     
-    def add_color(self, color: Tuple[int, int, int]):
-        """Добавить новый цвет в палитру"""
-        if color not in self._colors:
-            self._colors.append(color)
-    
-    def remove_color(self, index: int) -> bool:
-        """
-        Удалить цвет по индексу
-        
-        Args:
-            index: индекс цвета
-        
-        Returns:
-            True если успешно удален
-        """
-        if 0 <= index < len(self._colors) and len(self._colors) > 1:
-            self._colors.pop(index)
-            if self._selected_index >= len(self._colors):
-                self._selected_index = len(self._colors) - 1
-            return True
-        return False
-    
-    def find_color_index(self, color: Tuple[int, int, int]) -> int:
-        """
-        Найти индекс цвета в палитре
-        
-        Args:
-            color: цвет для поиска
-        
-        Returns:
-            Индекс цвета или -1 если не найден
-        """
-        try:
-            return self._colors.index(color)
-        except ValueError:
-            return -1
-    
     def __repr__(self) -> str:
         return f"Palette('{self._name}', colors={self.count})"
 
 
 class PaletteManager:
     """
-    Менеджер палитр - управляет несколькими палитрами
-    Реализует паттерн Strategy для переключения между палитрами
+    Менеджер палитры
     """
     
     BASIC_PALETTE = [
@@ -157,87 +98,20 @@ class PaletteManager:
         [220, 118, 51], [229, 152, 102], [237, 187, 153], [246, 221, 204]
     ]
     
-    THEMED_PALETTE = [
-        [241, 157, 154], [241, 179, 164], [246, 209, 190],
-        [252, 225, 213], [242, 193, 173], [241, 175, 153],
-        [128, 232, 221], [124, 194, 246], [175, 129, 228],
-        [231, 132, 186], [249, 193, 160], [183, 246, 175],
-        [100, 93, 62], [130, 123, 92], [156, 151, 115],
-        [86, 113, 80], [46, 71, 43], [16, 42, 10],
-        [252, 120, 150], [193, 107, 188], [152, 89, 197],
-        [108, 66, 196], [85, 56, 193], [30, 171, 215],
-        [92, 58, 42], [121, 84, 63], [172, 138, 104],
-        [200, 173, 139], [223, 213, 191], [206, 159, 85]
-    ]
-    
     def __init__(self):
-        """Инициализация менеджера палитр"""
-        self._palettes: List[Palette] = []
-        self._current_palette_index = 0
-        self._initialize_default_palettes()
+        """Инициализация менеджера палитры"""
+        self._palette: Palette = None
+        self._initialize_default_palette()
     
-    def _initialize_default_palettes(self):
-        """Инициализация стандартных палитр"""
+    def _initialize_default_palette(self):
+        """Инициализация стандартной палитры"""
         basic_colors = [tuple(c) for c in self.BASIC_PALETTE]
-        themed_colors = [tuple(c) for c in self.THEMED_PALETTE]
-        
-        self._palettes.append(Palette("Облик", basic_colors))
-        self._palettes.append(Palette("Мягкие оттенки", themed_colors))
+        self._palette = Palette("Облик", basic_colors)
     
     @property
     def current_palette(self) -> Palette:
         """Текущая активная палитра"""
-        return self._palettes[self._current_palette_index]
-    
-    @property
-    def palette_count(self) -> int:
-        """Количество доступных палитр"""
-        return len(self._palettes)
-    
-    def get_palette(self, index: int) -> Optional[Palette]:
-        """Получить палитру по индексу"""
-        if 0 <= index < len(self._palettes):
-            return self._palettes[index]
-        return None
-    
-    def get_palette_by_name(self, name: str) -> Optional[Palette]:
-        """Получить палитру по имени"""
-        for palette in self._palettes:
-            if palette.name == name:
-                return palette
-        return None
-    
-    def switch_palette(self, index: int) -> bool:
-        """Переключить текущую палитру"""
-        if 0 <= index < len(self._palettes):
-            self._current_palette_index = index
-            return True
-        return False
-    
-    def next_palette(self):
-        """Переключить на следующую палитру"""
-        self._current_palette_index = (self._current_palette_index + 1) % len(self._palettes)
-    
-    def previous_palette(self):
-        """Переключить на предыдущую палитру"""
-        self._current_palette_index = (self._current_palette_index - 1) % len(self._palettes)
-    
-    def add_palette(self, palette: Palette):
-        """Добавить новую палитру"""
-        self._palettes.append(palette)
-    
-    def remove_palette(self, index: int) -> bool:
-        """Удалить палитру"""
-        if 0 <= index < len(self._palettes) and len(self._palettes) > 1:
-            self._palettes.pop(index)
-            if self._current_palette_index >= len(self._palettes):
-                self._current_palette_index = len(self._palettes) - 1
-            return True
-        return False
-    
-    def get_all_palette_names(self) -> List[str]:
-        """Получить список имен всех палитр"""
-        return [p.name for p in self._palettes]
+        return self._palette
     
     def __repr__(self) -> str:
-        return f"PaletteManager(palettes={self.palette_count}, current='{self.current_palette.name}')"
+        return f"PaletteManager(palette='{self._palette.name}')"

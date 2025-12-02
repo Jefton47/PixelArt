@@ -1,5 +1,5 @@
 # ========================================
-# core/application.py (С ИКОНКАМИ)
+# core/application.py 
 # ========================================
 """Главный класс приложения"""
 
@@ -196,14 +196,6 @@ class Application:
             self._select_tool(2)  # Fill
         elif event.key == pg.K_i:
             self._select_tool(3)  # Eyedropper
-        
-        # Переключение палитр
-        elif event.key == pg.K_1:
-            self._palette_manager.switch_palette(0)
-            self._color_picker.set_colors(self._palette_manager.current_palette.colors)
-        elif event.key == pg.K_2:
-            self._palette_manager.switch_palette(1)
-            self._color_picker.set_colors(self._palette_manager.current_palette.colors)
     
     def _update(self):
         """Обновление логики"""
@@ -231,20 +223,6 @@ class Application:
         if selected_color:
             self._canvas_controller.current_color = selected_color
         
-        # Переключение палитр по клику на квадратики
-        if mouse_clicked:
-            # Палитра 1
-            palette1_rect = pg.Rect(900, 380, 15, 15)
-            if palette1_rect.collidepoint(mouse_pos):
-                self._palette_manager.switch_palette(0)
-                self._color_picker.set_colors(self._palette_manager.current_palette.colors)
-            
-            # Палитра 2
-            palette2_rect = pg.Rect(920, 380, 15, 15)
-            if palette2_rect.collidepoint(mouse_pos):
-                self._palette_manager.switch_palette(1)
-                self._color_picker.set_colors(self._palette_manager.current_palette.colors)
-        
         # Рисование на холсте
         if mouse_pos[0] < Config.GRID_WIDTH * Config.CELL_SIZE and \
            mouse_pos[1] < Config.GRID_HEIGHT * Config.CELL_SIZE:
@@ -256,7 +234,17 @@ class Application:
             if mouse_pressed:
                 if not self._canvas_controller._is_drawing:
                     self._canvas_controller.start_drawing()
+                
+                # Сохраняем старый цвет
+                old_color = self._canvas_controller.current_color
+                
+                # Рисуем
                 self._canvas_controller.draw_at(grid_x, grid_y)
+                
+                # Если цвет изменился (пипетка) - обновляем индикатор
+                if self._canvas_controller.current_color != old_color:
+                    self._color_picker.set_selected_color(self._canvas_controller.current_color)
+                    
             else:
                 if self._canvas_controller._is_drawing:
                     self._canvas_controller.stop_drawing()
@@ -335,32 +323,18 @@ class Application:
         palette_title = self._small_font.render("Палитра", True, (50, 50, 50))
         self._screen.blit(palette_title, (779, 380))
         
-        # Кнопки переключения палитр (2 квадратика)
-        palette1_rect = pg.Rect(900, 380, 15, 15)
-        palette2_rect = pg.Rect(920, 380, 15, 15)
-        
-        # Рисуем квадратики
-        pg.draw.rect(self._screen, (80, 80, 80), palette1_rect)
-        pg.draw.rect(self._screen, (80, 80, 80), palette2_rect)
-        
-        # Подсвечиваем активную палитру
-        current_palette_index = self._palette_manager._current_palette_index
-        if current_palette_index == 0:
-            pg.draw.rect(self._screen, (255, 255, 255), palette1_rect, 2)
-        else:
-            pg.draw.rect(self._screen, (255, 255, 255), palette2_rect, 2)
-        
         # Фон палитры
         pg.draw.rect(self._screen, (200, 200, 200), (779, 400, 170, 350))
         
-        # Палитра
-        self._color_picker.render(self._screen)
+        # Палитра (передаем текущий цвет для индикатора)
+        self._color_picker.render(self._screen, self._canvas_controller.current_color)
         
-        # Индикатор текущего цвета теперь внутри ColorPicker - убрано отсюда
+        # Фон для имени файла (БЕЛЫЙ)
+        pg.draw.rect(self._screen, (255, 255, 255), (310, 790, 370, 40))
         
         # Имя файла
         filename = self._file_controller.current_filename or "unnamed"
-        filename_surface = self._font.render(filename, True, (255, 255, 255))
+        filename_surface = self._font.render(filename, True, (0, 0, 0))
         self._screen.blit(filename_surface, (320, Config.SCREEN_HEIGHT - 50))
     
     def run(self):
@@ -373,7 +347,6 @@ class Application:
         print("\nГорячие клавиши:")
         print("  B - Кисть, E - Ластик, G - Заливка, I - Пипетка")
         print("  Ctrl+S - Сохранить, Ctrl+Z - Отменить")
-        print("  1/2 - Переключение палитр")
         print("="*35)
         
         while self._running:

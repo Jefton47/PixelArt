@@ -61,6 +61,15 @@ class CanvasController:
             grid_x, grid_y: координаты в сетке
         """
         current_tool = self._tool_manager.current_tool
+        
+        # Если пипетка - берем цвет с холста
+        if current_tool.name == "EyeDropper":
+            current_tool.use(self._grid, grid_x, grid_y, self._current_color)
+            if current_tool.picked_color:
+                self._current_color = current_tool.picked_color
+            return
+        
+        # Остальные инструменты
         current_tool.use(self._grid, grid_x, grid_y, self._current_color)
     
     def clear_canvas(self):
@@ -93,6 +102,8 @@ class CanvasController:
     def can_redo(self) -> bool:
         """Можно ли повторить"""
         return self._grid.history.can_redo()
+    
+    
     
     def pick_color_at(self, grid_x: int, grid_y: int) -> Tuple[int, int, int]:
         """

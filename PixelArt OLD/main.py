@@ -1,13 +1,7 @@
-try:
-   import pygame as pg
-   from tkinter import *
-   from tkinter import messagebox
-   from tkinter.filedialog import askopenfilename, asksaveasfilename
-except:
-   import pygame as pg
-   from tkinter import *
-   from tkinter import messagebox
-   from tkinter.filedialog import askopenfilename, asksaveasfilename
+import pygame as pg
+from tkinter import *
+from tkinter import messagebox
+from tkinter.filedialog import askopenfilename, asksaveasfilename
 import sys
 
 
@@ -155,29 +149,12 @@ colors1 = [[0, 0, 0], [24,24,24], [48,48,48], [64,64,64], [128,128,128],[155,155
            [110,44,0],[135,54,0],[160,64,0],[211,84,0],[220,118,51],[229,152,102],[237,187,153],[246,221,204]
            ]
 
-colors2 = [[241,157,154],[241,179,164],[246,209,190],[252,225,213],[242,193,173],[241,175,153], #Skins
-           [128,232,221],[124,194,246],[175,129,228],[231,132,186],[249,193,160],[183,246,175], # Soft Hues
-           [100,93,62],[130,123,92],[156,151,115],[86,113,80],[46,71,43],[16,42,10],            # Forest
-           [252,120,150],[193,107,188],[152,89,197],[108,66,196],[85,56,193],[30,171,215],      # Sunset
-           [92,58,42],[121,84,63],[172,138,104],[200,173,139],[223,213,191],[206,159,85]]       # Coffee
-
 colorCells1 = []
-colorCells2 = []
 for color in colors1:
     colorCells1.append(Cell(20, color))
 
-for color in colors2:
-    colorCells2.append(Cell(25, color))
-
 colorTitleFont = pg.font.SysFont(None, 25)
 colorTitle = colorTitleFont.render("Палитра", True, (50,50,50))
-
-colorScheme = 1
-colorFont = pg.font.SysFont(None, 22)
-colorTexts = [colorFont.render("Облик", True, (50,50,50)), colorFont.render("Мягкие оттенки", True, (50,50,50)),
-              colorFont.render("Лес", True, (50, 50, 50)), colorFont.render("Закат", True, (50,50,50)),
-              colorFont.render("Кофе", True, (50, 50, 50))]
-
 
 g1 = Grid(64, 64, 12, 0, 0, [255, 255, 255])
 save_b = Button(20,790,80,40, (100, 100, 100), "Save", 1, 24, (255,255,255))
@@ -195,11 +172,6 @@ B_fillTool = Button(825, 110, 30, 30, (80,80,80), "", 1)
 B_eyeDropper = Button(875, 110, 30, 30, (80,80,80), "", 1)
 
 B_Buttons = [B_penTool, B_eraserTool, B_fillTool, B_eyeDropper]
-
-P_number1 = Button(900, 380, 15,15, (80,80,80), "")
-P_number1.clicked = True
-P_number2 = Button(920, 380, 15,15, (80,80,80), "")
-P_Buttons = [P_number1, P_number2]
 
 fileFont = pg.font.SysFont(None, 30)
 nameSurface = pg.Surface((370,40))
@@ -223,7 +195,6 @@ mouseRelPosX = 0
 mouseRelPosY = 0
 
 positions1 = []
-positions2 = []
 visitedFillPositions = []
 
 i = 0
@@ -235,29 +206,13 @@ for color in colorCells1:
         i = 0
         j += 1
 
-i = 0
-j = 0
-for color in colorCells2:
-    positions2.append((789 + i * 25, 430 + j * 55))
-    i += 1
-    if i >= 6:
-        i = 0
-        j += 1
 
-
-def draw_palette(scheme):
+def draw_palette():
     screen.blit(colorTitle, (779, 380))
     pg.draw.rect(screen, (200, 200, 200), (779, 400, 170, 350))
 
-    if scheme == 1:
-        for i, color in enumerate(colorCells1):
-            screen.blit(color.subsurface, positions1[i])
-    elif scheme == 2:
-        for i, color in enumerate(colorCells2):
-            screen.blit(color.subsurface, positions2[i])
-
-        for t, text in enumerate(colorTexts):
-            screen.blit(text, (positions2[t * 6][0], positions2[t * 6][1] - 18))
+    for i, color in enumerate(colorCells1):
+        screen.blit(color.subsurface, positions1[i])
 
     pg.draw.rect(screen, (235, 235, 235), (positions1[-1][0] - 82, positions1[-1][1] + 27, 35, 35))
     pg.draw.rect(screen, colorUsing, (positions1[-1][0] - 76, positions1[-1][1] + 33, 23, 23))
@@ -453,13 +408,7 @@ def OpenFile(filePath):
         pg.display.set_caption("Pixelart  - " + fileName)
 
 def key_event_up(event):
-    global penSize, undoed, holdingCTRL, colorScheme, selectedTool
-
-
-    if event.key == pg.K_1:
-        colorScheme = 1
-    elif event.key == pg.K_2:
-        colorScheme = 2
+    global penSize, undoed, holdingCTRL, selectedTool
 
     if event.key == pg.K_e:
         selectedTool = 1
@@ -549,14 +498,10 @@ while True:
                         selectedColor = g1.grid[mouseRelPosX][mouseRelPosY].color
 
                 else:
-                    if colorScheme == 1:
-                        for i, Scolor in enumerate(colorCells1):
-                            if Scolor.subsurface.get_rect(topleft=positions1[i]).collidepoint(pg.mouse.get_pos()):
-                                selectedColor = Scolor.color
-                    elif colorScheme == 2:
-                        for i, Scolor in enumerate(colorCells2):
-                            if Scolor.subsurface.get_rect(topleft=positions2[i]).collidepoint(pg.mouse.get_pos()):
-                                selectedColor = Scolor.color
+                    for i, Scolor in enumerate(colorCells1):
+                        if Scolor.subsurface.get_rect(topleft=positions1[i]).collidepoint(pg.mouse.get_pos()):
+                            selectedColor = Scolor.color
+                    
                     for but in S_buttons:
                         if but.subsurface.get_rect(topleft=(but.pos[0]-but.width/2, but.pos[1])).collidepoint(pg.mouse.get_pos()):
                             but.active = True
@@ -582,13 +527,6 @@ while True:
                             selectedTool = B_Buttons.index(but)
                             for subbutton in B_Buttons:
                                 if B_Buttons.index(subbutton) != selectedTool:
-                                    subbutton.clicked = False
-                    for but in P_Buttons:
-                        if but.rollOver:
-                            but.clicked = True
-                            colorScheme = P_Buttons.index(but)+1
-                            for subbutton in P_Buttons:
-                                if P_Buttons.index(subbutton) != selectedTool:
                                     subbutton.clicked = False
 
         if event.type == pg.MOUSEBUTTONUP:
@@ -632,11 +570,6 @@ while True:
                         but.pos[0] = max(but.drawPos[0]-60, min(pg.mouse.get_pos()[0], but.drawPos[0]+60))
                     else:
                         but.active = False
-                for but in P_Buttons:
-                    if but.subsurface.get_rect(topleft=but.pos).collidepoint(pg.mouse.get_pos()):
-                        but.rollOver = True
-                    else:
-                        but.rollOver = False
 
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_LCTRL:
@@ -659,9 +592,6 @@ while True:
     for but in B_Buttons:
         but.Draw(screen)
 
-    for but in P_Buttons:
-        but.Draw(screen)
-
     screen.blit(colorTitleFont.render("Настройки размера", True, (50, 50, 50)), (779, 170))
     S_brushSize.Draw(screen, penSize)
     S_eraserSize.Draw(screen, eraserSize)
@@ -677,7 +607,7 @@ while True:
     screen.blit(pg.transform.scale(brushImage, (22,22)), (B_penTool.pos[0]+3, B_penTool.pos[1]+2))
     screen.blit(pg.transform.scale(dropperImage, (22,22)), (B_eyeDropper.pos[0]+3, B_eyeDropper.pos[1]+2))
 
-    draw_palette(colorScheme)
+    draw_palette()
 
     if selectedTool == 0:
         if pg.mouse.get_pos()[0] < g1.xCount * g1.cellSize and pg.mouse.get_pos()[1] < g1.yCount * g1.cellSize:

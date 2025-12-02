@@ -1,5 +1,5 @@
 # ========================================
-# ui/color_picker.py (ИСПРАВЛЕНО)
+# ui/color_picker.py
 # ========================================
 """Палитра цветов с отступами"""
 
@@ -34,6 +34,14 @@ class ColorPicker:
         """Установить список цветов"""
         self._colors = colors
         self._calculate_positions()
+    
+    def set_selected_color(self, color: Tuple[int, int, int]):
+        """Установить выбранный цвет (для пипетки)"""
+        try:
+            self._selected_index = self._colors.index(color)
+        except ValueError:
+            # Цвет не в палитре - ничего не делаем
+            pass
     
     def _calculate_positions(self):
         """Вычислить позиции всех цветов в сетке"""
@@ -71,8 +79,14 @@ class ColorPicker:
         
         return None
     
-    def render(self, screen: pg.Surface):
-        """Отрисовать палитру"""
+    def render(self, screen: pg.Surface, current_color: Optional[Tuple[int, int, int]] = None):
+        """
+        Отрисовать палитру
+        
+        Args:
+            screen: поверхность для рисования
+            current_color: текущий выбранный цвет (для индикатора)
+        """
         # Рисуем все цвета
         for i, (color, (x, y)) in enumerate(zip(self._colors, self._positions)):
             # Ячейка цвета
@@ -84,38 +98,38 @@ class ColorPicker:
                 pg.draw.rect(screen, (255, 255, 255), rect, 2)
         
         # Индикатор выбранного цвета ПОД палитрой по центру
-        if self._colors:
-            selected_color = self._colors[self._selected_index]
-            
-            # Вычисляем позицию под палитрой
-            rows = (len(self._colors) + self._cols - 1) // self._cols
-            palette_height = rows * (self._cell_size + self._gap)
-            
-            # Центр палитры по X
-            palette_width = self._cols * self._cell_size  # БЕЗ отступов по горизонтали
-            center_x = self._x + palette_width // 2
-            
-            # Позиция индикатора
-            indicator_y = self._y + palette_height + 15  # Больше отступ от палитры
-            indicator_size = 23  # Меньше размер (как в оригинале)
-            
-            # Серый фон (меньше рамка)
-            bg_rect = pg.Rect(
-                center_x - indicator_size // 2 - 5,
-                indicator_y - 5,
-                indicator_size + 10,
-                indicator_size + 10
-            )
-            pg.draw.rect(screen, (235, 235, 235), bg_rect)
-            
-            # Цвет
-            color_rect = pg.Rect(
-                center_x - indicator_size // 2,
-                indicator_y,
-                indicator_size,
-                indicator_size
-            )
-            pg.draw.rect(screen, selected_color, color_rect)
+        if current_color is None:
+            current_color = self._colors[self._selected_index] if self._colors else (0, 0, 0)
+        
+        # Вычисляем позицию под палитрой
+        rows = (len(self._colors) + self._cols - 1) // self._cols
+        palette_height = rows * (self._cell_size + self._gap)
+        
+        # Центр палитры по X
+        palette_width = self._cols * self._cell_size
+        center_x = self._x + palette_width // 2
+        
+        # Позиция индикатора
+        indicator_y = self._y + palette_height + 15
+        indicator_size = 23
+        
+        # Серый фон
+        bg_rect = pg.Rect(
+            center_x - indicator_size // 2 - 5,
+            indicator_y - 5,
+            indicator_size + 10,
+            indicator_size + 10
+        )
+        pg.draw.rect(screen, (235, 235, 235), bg_rect)
+        
+        # Цвет
+        color_rect = pg.Rect(
+            center_x - indicator_size // 2,
+            indicator_y,
+            indicator_size,
+            indicator_size
+        )
+        pg.draw.rect(screen, current_color, color_rect)
     
     def __repr__(self) -> str:
         return f"ColorPicker(colors={len(self._colors)}, selected={self._selected_index})"

@@ -27,62 +27,6 @@ def print_banner():
     print("=" * 60)
     print()
 
-
-def print_controls():
-    """Вывести справку по управлению"""
-    print("╔════════════════════════════════════════════════════════╗")
-    print("║              УПРАВЛЕНИЕ И ГОРЯЧИЕ КЛАВИШИ              ║")
-    print("╠════════════════════════════════════════════════════════╣")
-    print("║ ИНСТРУМЕНТЫ:                                           ║")
-    print("║   B         - Кисть (Brush)                            ║")
-    print("║   E         - Ластик (Eraser)                          ║")
-    print("║   G         - Заливка (Fill)                           ║")
-    print("║   I         - Пипетка (Eyedropper)                     ║")
-    print("║                                                        ║")
-    print("║ ФАЙЛЫ:                                                 ║")
-    print("║   Ctrl+S    - Быстрое сохранение                       ║")
-    print("║   Save      - Сохранить проект (.txt)                  ║")
-    print("║   Load      - Загрузить проект (.txt)                  ║")
-    print("║   Export    - Экспорт в PNG                            ║")
-    print("║                                                        ║")
-    print("║ РЕДАКТИРОВАНИЕ:                                        ║")
-    print("║   Ctrl+Z    - Отменить (Undo)                          ║")
-    print("║   Ctrl+Y    - Повторить (Redo)                         ║")
-    print("║   Ctrl+Space- Очистить холст                           ║")
-    print("║                                                        ║")
-    print("║ ПАЛИТРЫ:                                               ║")
-    print("║   1         - Палитра 'Облик' (96 цветов)              ║")
-    print("║   2         - Палитра 'Мягкие оттенки' (30 цветов)     ║")
-    print("║                                                        ║")
-    print("║ РАЗМЕРЫ:                                               ║")
-    print("║   Слайдер   - Регулировка размера кисти/ластика (1-5)  ║")
-    print("╚════════════════════════════════════════════════════════╝")
-    print()
-
-
-def print_architecture():
-    """Вывести информацию об архитектуре"""
-    print("╔════════════════════════════════════════════════════════╗")
-    print("║              АРХИТЕКТУРА ПРИЛОЖЕНИЯ (ООП)              ║")
-    print("╠════════════════════════════════════════════════════════╣")
-    print("║ ПАТТЕРНЫ ПРОЕКТИРОВАНИЯ:                               ║")
-    print("║   • MVC (Model-View-Controller)                        ║")
-    print("║   • Strategy (Инструменты рисования)                   ║")
-    print("║   • Singleton (Application)                            ║")
-    print("║   • Command (Undo/Redo)                                ║")
-    print("║   • Observer (События)                                 ║")
-    print("║                                                        ║")
-    print("║ СТРУКТУРА МОДУЛЕЙ:                                     ║")
-    print("║   models/      - Модели данных (Grid, Cell, Palette)  ║")
-    print("║   utils/       - Утилиты (Vector2D, math, files)       ║")
-    print("║   tools/       - Инструменты (Brush, Eraser, Fill)     ║")
-    print("║   ui/          - UI компоненты (Button, Slider)        ║")
-    print("║   controllers/ - Контроллеры (Input, File, Canvas)    ║")
-    print("║   core/        - Ядро приложения (Application)         ║")
-    print("╚════════════════════════════════════════════════════════╝")
-    print()
-
-
 def check_dependencies():
     """Проверить наличие необходимых зависимостей"""
     print("Проверка зависимостей...")
@@ -120,10 +64,6 @@ def main():
     if not check_dependencies():
         print("\n❌ Невозможно запустить приложение - отсутствуют зависимости")
         sys.exit(1)
-    
-    # Справка
-    print_controls()
-    print_architecture()
     
     # Запуск приложения
     try:
