@@ -112,7 +112,7 @@ class Slider:
         
         # Значение - текст крупнее
         value_surface = self._font.render(str(self._value), True, (30, 30, 30))
-        screen.blit(value_surface, (self._draw_x - 86, self._y + 2))
+        screen.blit(value_surface, (self._draw_x - 83, self._y + 5))
         
         # Ползунок
         slider_x = self._calculate_slider_position()

@@ -27,6 +27,7 @@ def print_banner():
     print("=" * 60)
     print()
 
+
 def check_dependencies():
     """Проверить наличие необходимых зависимостей"""
     print("Проверка зависимостей...")
@@ -86,5 +87,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-    
