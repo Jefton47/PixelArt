@@ -11,7 +11,7 @@ pg.init()
 sw, sh = 960, 850
 sc = (sw//2, sh//2)
 screen = pg.display.set_mode((sw, sh))
-pg.display.set_caption("Pixelart")
+pg.display.set_caption("Pixelart Editor ")
 pg.display.set_icon(pg.image.load("icon.png"))
 
 fillImage = pg.transform.scale(pg.image.load("fill.png"), (40,40))
