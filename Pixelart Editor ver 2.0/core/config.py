@@ -30,7 +30,7 @@ class Config:
     FPS = 60
     
     # Заголовок окна
-    WINDOW_TITLE = "Pixelart Editor - ООП Рефакторинг"
+    WINDOW_TITLE = "Pixelart Editor v2.0"
     
     # Пути к ресурсам
     ICON_PATH = "assets/icon.png"

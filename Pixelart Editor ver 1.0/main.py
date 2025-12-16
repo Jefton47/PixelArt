@@ -1,6 +1,10 @@
+"""
+Pixelart Editor
+
+Версия: 1.0
+"""
 import pygame as pg
 from tkinter import *
-from tkinter import messagebox
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 import sys
 
@@ -11,7 +15,7 @@ pg.init()
 sw, sh = 960, 850
 sc = (sw//2, sh//2)
 screen = pg.display.set_mode((sw, sh))
-pg.display.set_caption("Pixelart Editor ")
+pg.display.set_caption("Pixelart Editor v1.0 ")
 pg.display.set_icon(pg.image.load("icon.png"))
 
 fillImage = pg.transform.scale(pg.image.load("fill.png"), (40,40))
@@ -381,7 +385,7 @@ def SaveFile(gridObject, filePath):
 
         filePathList = filePath.split("/")
         fileName = filePathList[-1]
-        pg.display.set_caption("Pixilart - " + fileName)
+        pg.display.set_caption("Pixelart Editor v1.0 - " + fileName)
 
 
 def OpenFile(filePath):
@@ -405,7 +409,7 @@ def OpenFile(filePath):
         file.close()
         filePathList = filePath.split("/")
         fileName = filePathList[-1]
-        pg.display.set_caption("Pixelart  - " + fileName)
+        pg.display.set_caption("Pixelart Editor v1.0  - " + fileName)
 
 def key_event_up(event):
     global penSize, undoed, holdingCTRL, selectedTool
@@ -546,11 +550,8 @@ while True:
                     but.active = False
 
         if event.type == pg.MOUSEMOTION:
-            if pg.mouse.get_pos()[0] < g1.xCount * g1.cellSize and pg.mouse.get_pos()[1] < g1.yCount * g1.cellSize:
-                pg.mouse.set_visible(False)
-            else:
-                pass
-                pg.mouse.set_visible(True)
+            pg.mouse.set_visible(True)
+            
             if clicking:
                 if pg.mouse.get_pos()[0] < g1.xCount * g1.cellSize and pg.mouse.get_pos()[1] < g1.yCount * g1.cellSize:
                     paint(selectedTool)
@@ -608,20 +609,5 @@ while True:
     screen.blit(pg.transform.scale(dropperImage, (22,22)), (B_eyeDropper.pos[0]+3, B_eyeDropper.pos[1]+2))
 
     draw_palette()
-
-    if selectedTool == 0:
-        if pg.mouse.get_pos()[0] < g1.xCount * g1.cellSize and pg.mouse.get_pos()[1] < g1.yCount * g1.cellSize:
-            pg.draw.circle(screen, colorUsing, (pg.mouse.get_pos()), penSize * 8, 1)
-    elif selectedTool == 1:
-        if pg.mouse.get_pos()[0] < g1.xCount * g1.cellSize and pg.mouse.get_pos()[1] < g1.yCount * g1.cellSize:
-            pg.draw.circle(screen, (50,50,50), (pg.mouse.get_pos()), eraserSize * 8, 1)
-    elif selectedTool == 2:
-        if pg.mouse.get_pos()[0] < g1.xCount * g1.cellSize and pg.mouse.get_pos()[1] < g1.yCount * g1.cellSize:
-            screen.blit(fillImage, (pg.mouse.get_pos()[0], pg.mouse.get_pos()[1]-35))
-    elif selectedTool == 3:
-        if pg.mouse.get_pos()[0] < g1.xCount * g1.cellSize and pg.mouse.get_pos()[1] < g1.yCount * g1.cellSize:
-            screen.blit(dropperImage, (pg.mouse.get_pos()[0], pg.mouse.get_pos()[1]-30))
-
-
 
     pg.display.update()
